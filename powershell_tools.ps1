@@ -1,8 +1,13 @@
-﻿set variable : $a = 5
+﻿#ping go0gle
+ping 8.8.8.8
 
-help : Get-Help Get-AzureRmContext
+#set variable : 
+$a = 5
 
-types :
+#help : 
+Get-Help Get-AzureRmContext
+
+#types :
 	$a = "1"
 	$b = [int]$a
 	$c = [string]$b
@@ -13,29 +18,31 @@ types :
 	[boolean]$value     
 	[datetime]$value
 
-array :
+#array :
 	$a = 5
 	$b = 2
 	$c = "hello"
 	$mixed_array = $a, $b, $c ----- output : 5,2,"hello"
 	
-	official operator of arrays : @ 
+	#official operator of arrays : @ 
 	$mixed_array = @(5 ; 2 ; "hello")
 	
-	position of array : $mix_array[1]  ---- output = 2
+	#position of array : 
+    $mix_array[1]  ---- output = 2
 	
-	BE CAREFULL!!! $mix_array + 5 adds an element to the array (it dowsn t add 5 to each element of the array)
-		----- output 5, 2, "hello", 5
+	#BE CAREFULL!!! $mix_array + 5 adds an element to the array (it dowsn t add 5 to each element of the array)
+	#	----- output 5, 2, "hello", 5
 		
-		array from 0 to 10
+	#	array from 0 to 10
 			$arr_0_10 = @(0..10) ---- OUTPUT 0,1,2 .. .. 10
 
-dictionary : 
+#dictionary : 
 	$mixed_dictionary = @{"a" = "5" ; "b" = "2" ; "c" = "hello"}
 	
-type : $mix_array.GetType() ----- output : System.Array  
+#type : 
+$mix_array.GetType() ----- output : System.Array  
 
-function :
+#function :
 	function fn_sum([int]$number0, [int]$number1) {
 		$sum = $number0 + $number1
 		$sum
@@ -43,7 +50,7 @@ function :
 	
 	fn_sum 4 8 ------ output 12   (BECAREFULL HOW YOU PASS THE INPUTS, IF fn_sum(4,8) IT READS A LIST --- OUTPUT 4, 8)
 
-foreach loop : 
+#foreach loop : 
 	Foreach ($value in $mix_array) 
     {
         $value + 5
@@ -51,8 +58,8 @@ foreach loop :
 	
 	------ otuput : 10,7,hello5
 	
-connect to azure
-	article : https://www.jgspiers.com/how-to-connect-to-azure-powershell-arm-azuread/
+#connect to azure
+#	article : https://www.jgspiers.com/how-to-connect-to-azure-powershell-arm-azuread/
 	
 	$PSVersionTable.PSVersion ---- version must be at least 5 
 	Install-Module AzureRM   ---- runned as administrator 
@@ -67,7 +74,7 @@ connect to azure
 	
 		check connection : Get-AzureRmContext
 
-disconnect to azure
+#disconnect to azure
 	Disconnect-AzureRmAccount
 	
 	create and remove resurce group
