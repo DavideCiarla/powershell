@@ -75,7 +75,7 @@ function cr_from_to_res_groups([string]$subscription, [string]$location, [string
 cr_from_to_res_groups $name_subscription $location_resource_group $pattern_name
 
 ################################################################################################################################################
-#cr_from_to_res_groups : funzione per rimuovere only specified res groups                                                                      #                                                                                    #
+#del_res_groups : funzione per rimuovere only specified res groups                                                                             #                                                                                    #
 ################################################################################################################################################
 function del_res_groups([string]$subscription, [string]$pattern) {
 
