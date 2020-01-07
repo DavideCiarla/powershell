@@ -8,6 +8,9 @@ $path_month = (get-date).ToString(“MM”) #$path_month.GetType() -- string
 $pr_name = $tbl_name + "_" + $path_year + $path_month   #"ft_saldi_mlo_201911" ------ ft_saldi_mlo201912  $pr_name.GetType() ---- string
 
 
+ $params = @{'db_name'  = $db_name;
+             'tbl_name' = $tbl_name;
+             'pr_name'  = $pr_name}
 
 function cr_query ([string]$db_name, [string]$tbl_name, [string]$pr_name) {
 
@@ -37,6 +40,7 @@ function cr_query ([string]$db_name, [string]$tbl_name, [string]$pr_name) {
 
 }
 
+cr_query @params
 
-cr_query $db_name $tbl_name $pr_name
 ######################################################################################################################
+

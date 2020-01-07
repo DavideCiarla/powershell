@@ -17,6 +17,8 @@ Get-Help Get-AzureRmContext
 	[string]$value      
 	[boolean]$value     
 	[datetime]$value
+ 
+$mix_array.GetType() ----- output : System.Array  
 
 #array :
 	$a = 5
@@ -39,8 +41,6 @@ Get-Help Get-AzureRmContext
 #dictionary : 
 	$mixed_dictionary = @{"a" = "5" ; "b" = "2" ; "c" = "hello"}
 	
-#type : 
-$mix_array.GetType() ----- output : System.Array  
 
 #function :
 	function fn_sum([int]$number0, [int]$number1) {
@@ -50,6 +50,19 @@ $mix_array.GetType() ----- output : System.Array
 	
 	fn_sum 4 8 ------ output 12   (BECAREFULL HOW YOU PASS THE INPUTS, IF fn_sum(4,8) IT READS A LIST --- OUTPUT 4, 8)
 
+#pass dictionary to function
+$params = @{"a" = 1;
+           "b" = 2;
+           "c" = 3}
+
+function sum ( $a, $b, $c ) {
+    $result = $a + $b + $c
+    $result
+}
+
+sum 1 2 3       # 6
+sum @params     # 6
+
 #foreach loop : 
 	Foreach ($value in $mix_array) 
     {
@@ -57,6 +70,15 @@ $mix_array.GetType() ----- output : System.Array
     }
 	
 	------ otuput : 10,7,hello5
+
+#set input from cmd
+Param(
+  [Parameter(Mandatory=$true)][String] $name,         
+  [Parameter(Mandatory=$true)][String] $years   
+)
+    #console asks you to insert a name and years
+
+$name + " - " + $years
 	
 #connect to azure
 #	article : https://www.jgspiers.com/how-to-connect-to-azure-powershell-arm-azuread/
@@ -74,6 +96,10 @@ $mix_array.GetType() ----- output : System.Array
 	
 		check connection : Get-AzureRmContext
 
+#or
+Install-Module Az.Accounts -Scope CurrentUser -AllowClobber #clobber = picchiare
+Connect-AzAccount
+
 #disconnect to azure
 	Disconnect-AzureRmAccount
 	
@@ -82,3 +108,7 @@ $mix_array.GetType() ----- output : System.Array
 		New-AzureRmResourceGroup -Name RG_from_script_dvd -Location "North Europe"    ---- create
 		Remove-AzureRmResourceGroup -Name RG_from_script_dvd                          ---- remove
 		
+#see available locations
+Get-AzLocation
+Get-AzLocation | select Location
+$location = "northeurope"
