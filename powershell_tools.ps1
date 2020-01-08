@@ -74,11 +74,13 @@ sum @params     # 6
 #set input from cmd
 Param(
   [Parameter(Mandatory=$true)][String] $name,         
-  [Parameter(Mandatory=$true)][String] $years   
+  [Parameter(Mandatory=$true)][String] $years,
+  [Parameter (Mandatory = $true)][String[]] $list    #it makes you add items. to interrupt the loop click ENTER again (don't stop the script
+                                                     #otherwise it interrupt the Param method hence no variable is set)
 )
     #console asks you to insert a name and years
 
-$name + " - " + $years
+$name + " - " + $years + " - " + $list
 	
 #connect to azure
 #	article : https://www.jgspiers.com/how-to-connect-to-azure-powershell-arm-azuread/

@@ -1,13 +1,10 @@
 ﻿#$name_subscription = "<***>"
 #$location_resource_group = "<***>"
 #$pattern_name = "<***>"
-#$students_number = <***>
 
 #$name_subscription = "Porini Education Microsoft Azure"
 #$location_resource_group = "North Europe"
 #$pattern_name = "rdvd"
-#$students_number = 4
-#$id = @(1,2, 3)   
 
 Install-Module AzureRM -Scope CurrentUser
 Import-Module AzureRM
@@ -21,10 +18,18 @@ Import-Module AzureRM
 # - numero studenti ex. 13 --> creerà 13 gruppi di risorse chiamate : user1, user2, .. .. , user13                                             #
 ################################################################################################################################################
 
-function cr_from_to_res_groups([string]$subscription, [string]$location, [string]$pattern, [int]$to_ptr) {
+function cr_from_to_res_groups{
     
+    Param(
+      [Parameter(Mandatory=$true)][String] $subscription,         
+      [Parameter(Mandatory=$true)][String] $location,
+      [Parameter(Mandatory=$true)][String] $pattern,
+      [Parameter(Mandatory=$true)][String] $to_ptr                         #from 1 to number specified here (1,2, .. .. 13)
+    )
+
     Connect-AzureRmAccount -Subscription $subscription                     #connect to azure
-    $fr_to_pattern = @(1..$to_ptr)                                         #(user) from 1 to number specified in function (1,2, .. .. 13) 
+
+    $fr_to_pattern = @(1..$to_ptr)                                        
                                                                          
     $arr_students = @()                                                    #dump list
                                                                          
@@ -34,18 +39,16 @@ function cr_from_to_res_groups([string]$subscription, [string]$location, [string
     }
 
     foreach ($student in $arr_students) {                                  #| resource
-        New-AzureRmResourceGroup -Name $student -Location "North Europe"   #|         groups
+        New-AzureRmResourceGroup -Name $student -Location $location        #|         groups
     }                                                                      #|               creation
                                                                            
     Disconnect-AzureRmAccount                                              #disconnect to azure
 
-    "created " + $to_ptr + " resource groups :)"     
-
+    "created " + $to_ptr + " resource groups :) : "   
+    $arr_students  
 }
 
-
-
-cr_from_to_res_groups $name_subscription $location_resource_group $pattern_name $students_number
+cr_from_to_res_groups 
 
 ################################################################################################################################################
 #cr_from_to_res_groups : funzione per creare / svuotare (se esistenti) only specified res groups                                               #                                             #
@@ -53,13 +56,20 @@ cr_from_to_res_groups $name_subscription $location_resource_group $pattern_name 
 ################################################################################################################################################
 
 
-function cr_from_to_res_groups([string]$subscription, [string]$location, [string]$pattern) {
+function cr_from_to_res_groups {
+    
+    Param(
+      [Parameter(Mandatory=$true)][String] $subscription,         
+      [Parameter(Mandatory=$true)][String] $location,
+      [Parameter(Mandatory=$true)][String] $pattern,
+      [Parameter (Mandatory = $true)][String[]] $id_students
+    )
 
     $arr_students = @()  
 
     Connect-AzureRmAccount -Subscription $subscription 
 
-    Foreach ($value in $id) {                                   
+    Foreach ($value in $id_students) {                                   
             $student = $pattern + $value                                       
             $arr_students += $student                                          
     }
@@ -69,34 +79,41 @@ function cr_from_to_res_groups([string]$subscription, [string]$location, [string
     } 
 
     Disconnect-AzureRmAccount     
-    "created " + $id.Count + " resource groups :)"  
+    "created " + $id_students.Count + " resource groups :) :"  
+    $arr_students
 }
 
-cr_from_to_res_groups $name_subscription $location_resource_group $pattern_name
+cr_from_to_res_groups 
 
 ################################################################################################################################################
 #del_res_groups : funzione per rimuovere only specified res groups                                                                             #                                                                                    #
 ################################################################################################################################################
-function del_res_groups([string]$subscription, [string]$pattern) {
+function del_res_groups{
+    
+    Param(
+      [Parameter(Mandatory=$true)][String] $subscription,         
+      [Parameter(Mandatory=$true)][String] $pattern,
+      [Parameter (Mandatory = $true)][String[]] $id_students
+    )
 
     $arr_students = @()  
 
     Connect-AzureRmAccount -Subscription $subscription 
 
-    Foreach ($value in $id) {                                   
+    Foreach ($value in $id_students) {                                   
             $student = $pattern + $value                                       
             $arr_students += $student                                          
     }
 
-    foreach ($student in $arr_students) {                                  
-            Remove-AzureRmResourceGroup -name $student
-    } 
+    #foreach ($student in $arr_students) {                                  
+    #        Remove-AzureRmResourceGroup -name $student
+    #} 
 
     Disconnect-AzureRmAccount     
-    "delated " + $id.Count + " resource groups :)"
-
+    "delated " + $id_students.Count + " resource groups :) : "
+    $arr_students
 }
 
-del_res_groups $name_subscription $pattern_name
+del_res_groups
 
 

@@ -1,14 +1,49 @@
 ######################################################################################################################
-###### correggere, pescarli da interfaccia
-$db_name = "TEST_Partitioning"
+
+https://cloudblogs.microsoft.com/industry-blog/en-gb/cross-industry/2018/06/22/how-to-automate-processing-your-azure-analysis-services-models/
+
+# Get the service principal credentials connected to the automation account. 
+##still have to log
+param
+(
+    [Parameter (Mandatory = $false)][String] $db_name,
+
+    [Parameter (Mandatory = $false)][String] $AnalysisServer,
+
+    [Parameter (Mandatory = $false)][String] $RefreshType,
+
+    [Parameter (Mandatory = $false)][String] $ObjectType,
+    
+    [Parameter (Mandatory = $true)][String[]] $TablesList
+)
+
+Param(
+  [Parameter(Mandatory=$true)][String] $name,         
+  [Parameter(Mandatory=$true)][String] $years,
+  [Parameter (Mandatory = $true)][String[]] $TablesList
+)
+    #console asks you to insert a name and years
+
+$name + " - " + $years
+
+$_Credential = Get-AutomationPSCredential -Name "Andrea riva"
+
+# Connect to a connection to get TenantId and SubscriptionId
+$connection = Get-AutomationConnection -Name "AzureRunAsConnection"
+$tenantId = $connection.TenantId
+$subscriptionId = $connection.SubscriptionId   
+
+# Login to Azure
+$null = Login-AzureRmAccount -TenantId $tenantId -SubscriptionId $subscriptionId -Credential $_Credential
+
+#$db_name = "TEST_Partitioning"
 $tbl_name = "ft_saldi_mlo"
 
 $path_year = (get-date).ToString(“yyyy”) #$path_year.GetType() -- string
 $path_month = (get-date).ToString(“MM”) #$path_month.GetType() -- string
 $pr_name = $tbl_name + "_" + $path_year + $path_month   #"ft_saldi_mlo_201911" ------ ft_saldi_mlo201912  $pr_name.GetType() ---- string
 
-
- $params = @{'db_name'  = $db_name;
+$params = @{'db_name'  = $db_name;
              'tbl_name' = $tbl_name;
              'pr_name'  = $pr_name}
 
@@ -40,7 +75,14 @@ function cr_query ([string]$db_name, [string]$tbl_name, [string]$pr_name) {
 
 }
 
-cr_query @params
+$query = cr_query @params
+
+##Creating the partition
+Invoke-ASCmd -Server $asServerURI -Credential $psCredential -Query $query
+
+
+##Processing the partition
+$result = Invoke-ProcessPartition -Server $asServerURI -Database $db_name -TableName $tbl_name -PartitionName $pr_name –RefreshType Full -Credential $psCredential
 
 ######################################################################################################################
 
