@@ -1,32 +1,9 @@
 ######################################################################################################################
 
-https://cloudblogs.microsoft.com/industry-blog/en-gb/cross-industry/2018/06/22/how-to-automate-processing-your-azure-analysis-services-models/
+#https://cloudblogs.microsoft.com/industry-blog/en-gb/cross-industry/2018/06/22/how-to-automate-processing-your-azure-analysis-services-models/
 
-# Get the service principal credentials connected to the automation account. 
-##still have to log
-param
-(
-    [Parameter (Mandatory = $false)][String] $db_name,
-
-    [Parameter (Mandatory = $false)][String] $AnalysisServer,
-
-    [Parameter (Mandatory = $false)][String] $RefreshType,
-
-    [Parameter (Mandatory = $false)][String] $ObjectType,
-    
-    [Parameter (Mandatory = $true)][String[]] $TablesList
-)
-
-Param(
-  [Parameter(Mandatory=$true)][String] $name,         
-  [Parameter(Mandatory=$true)][String] $years,
-  [Parameter (Mandatory = $true)][String[]] $TablesList
-)
-    #console asks you to insert a name and years
-
-$name + " - " + $years
-
-$_Credential = Get-AutomationPSCredential -Name "Andrea riva"
+$credential = Get-AutomationPSCredential -Name "Andrea riva"
+$asServerURI = Get-AutomationVariable -Name 'ASServerURI'
 
 # Connect to a connection to get TenantId and SubscriptionId
 $connection = Get-AutomationConnection -Name "AzureRunAsConnection"
@@ -34,10 +11,11 @@ $tenantId = $connection.TenantId
 $subscriptionId = $connection.SubscriptionId   
 
 # Login to Azure
-$null = Login-AzureRmAccount -TenantId $tenantId -SubscriptionId $subscriptionId -Credential $_Credential
+$null = Login-AzureRmAccount -TenantId $tenantId -SubscriptionId $subscriptionId -Credential $credential
 
-#$db_name = "TEST_Partitioning"
-$tbl_name = "ft_saldi_mlo"
+$db_name = "TEST_Partitioning" 
+$tbl_name = "ft_saldi_mlo"  
+#$TablesList = @("tbl1", "tbl2", "tblN")   ## dovrebbe essere solo una tbl (se no creare un foreach)   
 
 $path_year = (get-date).ToString(“yyyy”) #$path_year.GetType() -- string
 $path_month = (get-date).ToString(“MM”) #$path_month.GetType() -- string
@@ -78,11 +56,11 @@ function cr_query ([string]$db_name, [string]$tbl_name, [string]$pr_name) {
 $query = cr_query @params
 
 ##Creating the partition
-Invoke-ASCmd -Server $asServerURI -Credential $psCredential -Query $query
+Invoke-ASCmd -Server $asServerURI -Credential $credential -Query $query
 
 
 ##Processing the partition
-$result = Invoke-ProcessPartition -Server $asServerURI -Database $db_name -TableName $tbl_name -PartitionName $pr_name –RefreshType Full -Credential $psCredential
+$result = Invoke-ProcessPartition -Server $asServerURI -Database $db_name -TableName $tbl_name -PartitionName $pr_name –RefreshType Full -Credential $credential
 
 ######################################################################################################################
 

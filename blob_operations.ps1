@@ -27,13 +27,6 @@ $storageAccount = New-AzStorageAccount -ResourceGroupName $resourceGroupName `
   -Location $location `
   -SkuName "Standard_LRS"
 
-$ctx = $storageAccount.Context
-
-$storageAccount = New-AzStorageAccount -ResourceGroupName $resourceGroupName `
-  -Name $storageAccountName2 `
-  -Location $location `
-  -SkuName "Standard_LRS"
-
 $ctx2 = $storageAccount.Context
 
 #create new container
@@ -54,6 +47,19 @@ $key2 = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -Name $st
 $x = (Get-AzTag -name key_tag).Values[0][0]
 #Get-AzTag -name key_tag
 $x.GetType()    # ---- tag object
+
+#set context
+    Connect-AzAccount -Subscription "Porini Education Microsoft Azure"
+
+    $str_account_name = "staccillimityy"
+    $str_account_key = "<sorage account key>"
+
+    $ctx = New-AzStorageContext -StorageAccountName $str_account_name -StorageAccountKey $str_account_key
+
+#set retrive metadata blob
+    $resource = Get-AzResource -ResourceName $adlname 
+    Set-AzResource -Tag @{ "Data"=$date, "data2" = "sddd"} -ResourceId $resource.ResourceId -Force 
+    (Get-AzStorageBlob -Container $container_name -Context $ctx -Blob $blob_name).ICloudBlob.Metadata
 
 #show containers 
 Get-AzStorageContainer -Context $ctx

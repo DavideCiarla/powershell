@@ -51,6 +51,7 @@ $mix_array.GetType() ----- output : System.Array
 	fn_sum 4 8 ------ output 12   (BECAREFULL HOW YOU PASS THE INPUTS, IF fn_sum(4,8) IT READS A LIST --- OUTPUT 4, 8)
 
 #pass dictionary to function
+    # @ used in this way called "splatter operator" when you pass many items to one variable
 $params = @{"a" = 1;
            "b" = 2;
            "c" = 3}
@@ -84,7 +85,9 @@ $name + " - " + $years + " - " + $list
 	
 #connect to azure
 #	article : https://www.jgspiers.com/how-to-connect-to-azure-powershell-arm-azuread/
+# becarefull to "Get-AzureContext", don t use it! many command in documentation are written as ..-Azure.. but is deprecated, use ..-Az..("Get-AzContext")
 	
+    Get-AzContext -ListAvailable
 	$PSVersionTable.PSVersion ---- version must be at least 5 
 	Install-Module AzureRM   ---- runned as administrator 
 	
@@ -95,12 +98,25 @@ $name + " - " + $years + " - " + $list
 		Import-Module AzureRM OK
 	
 	Connect-AzureRmAccount -Subscription "Porini Education Microsoft Azure"
-	
+	Get-AzContext -ListAvailable
 		check connection : Get-AzureRmContext
 
 #or
 Install-Module Az.Accounts -Scope CurrentUser -AllowClobber #clobber = picchiare
 Connect-AzAccount
+
+#set context
+    Connect-AzAccount -Subscription "Porini Education Microsoft Azure"
+
+    $str_account_name = "staccillimityy"
+    $str_account_key = "<sorage account key>"
+        
+    $ctx = New-AzStorageContext -StorageAccountName $str_account_name -StorageAccountKey $str_account_key
+
+#set retrive metadata blob
+    $resource = Get-AzResource -ResourceName $adlname 
+    Set-AzResource -Tag @{ "Data"=$date, "data2" = "sddd"} -ResourceId $resource.ResourceId -Force 
+    (Get-AzStorageBlob -Container $container_name -Context $ctx -Blob $blob_name).ICloudBlob.Metadata
 
 #disconnect to azure
 	Disconnect-AzureRmAccount
