@@ -6,7 +6,7 @@ Import-Module AzureRM
 
 az login
 
-$NAME = "cosmosdvd"
+$NAME = "<>"
 
 #cosmos creation
 az cosmosdb create --name $NAME --kind GlobalDocumentDB --resource-group learn-fb0b5fe7-5505-439b-a818-7b924ce17c39
