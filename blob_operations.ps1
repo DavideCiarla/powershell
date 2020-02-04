@@ -1,5 +1,5 @@
 ﻿Install-Module Az -Scope CurrentUser -AllowClobber #clobber = picchiare
-Connect-AzAccount -Subscription "Porini Education Microsoft Azure"
+Connect-AzAccount -Subscription "<>"
 
 
 #if you forget location names
@@ -16,8 +16,8 @@ Param(
 #$resourceGroupName = "resgndvd"
 #$storageAccountName = "standvd"
 #$containerName = "cntndvd"
-$containerName2 = "cntndvd2"
-$storageAccountName2 = "standvd2" 
+$containerName2 = "<>"
+$storageAccountName2 = "<>" 
 
 New-AzResourceGroup -Name $resourceGroupName -Location $location
 
@@ -51,7 +51,7 @@ $x.GetType()    # ---- tag object
 #set context
     Connect-AzAccount -Subscription "Porini Education Microsoft Azure"
 
-    $str_account_name = "staccillimityy"
+    $str_account_name = "<>"
     $str_account_key = "<sorage account key>"
 
     $ctx = New-AzStorageContext -StorageAccountName $str_account_name -StorageAccountKey $str_account_key
