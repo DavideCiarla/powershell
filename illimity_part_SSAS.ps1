@@ -2,8 +2,8 @@
 
 #https://cloudblogs.microsoft.com/industry-blog/en-gb/cross-industry/2018/06/22/how-to-automate-processing-your-azure-analysis-services-models/
 
-$credential = Get-AutomationPSCredential -Name "Andrea riva"
-$asServerURI = Get-AutomationVariable -Name 'ASServerURI'
+$credential = Get-AutomationPSCredential -Name "<>"
+$asServerURI = Get-AutomationVariable -Name '<>'
 
 # Connect to a connection to get TenantId and SubscriptionId
 $connection = Get-AutomationConnection -Name "AzureRunAsConnection"
@@ -17,8 +17,8 @@ $db_name = "TEST_Partitioning"
 $tbl_name = "ft_saldi_mlo"  
 #$TablesList = @("tbl1", "tbl2", "tblN")   ## dovrebbe essere solo una tbl (se no creare un foreach)   
 
-$path_year = (get-date).ToString(ìyyyyî) #$path_year.GetType() -- string
-$path_month = (get-date).ToString(ìMMî) #$path_month.GetType() -- string
+$path_year = (get-date).ToString(‚Äúyyyy‚Äù) #$path_year.GetType() -- string
+$path_month = (get-date).ToString(‚ÄúMM‚Äù) #$path_month.GetType() -- string
 $pr_name = $tbl_name + "_" + $path_year + $path_month   #"ft_saldi_mlo_201911" ------ ft_saldi_mlo201912  $pr_name.GetType() ---- string
 
 $params = @{'db_name'  = $db_name;
@@ -60,7 +60,7 @@ Invoke-ASCmd -Server $asServerURI -Credential $credential -Query $query
 
 
 ##Processing the partition
-$result = Invoke-ProcessPartition -Server $asServerURI -Database $db_name -TableName $tbl_name -PartitionName $pr_name ñRefreshType Full -Credential $credential
+$result = Invoke-ProcessPartition -Server $asServerURI -Database $db_name -TableName $tbl_name -PartitionName $pr_name ‚ÄìRefreshType Full -Credential $credential
 
 ######################################################################################################################
 
