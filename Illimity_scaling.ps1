@@ -19,7 +19,7 @@ param
     [String[]] $TablesList
 )
 
-$_Credential = Get-AutomationPSCredential -Name "Andrea riva"
+$_Credential = Get-AutomationPSCredential -Name "<>"
 
 # Connect to a connection to get TenantId and SubscriptionId
 $connection = Get-AutomationConnection -Name "AzureRunAsConnection"
