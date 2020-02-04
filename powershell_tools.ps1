@@ -97,7 +97,7 @@ $name + " - " + $years + " - " + $list
 		Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 		Import-Module AzureRM OK
 	
-	Connect-AzureRmAccount -Subscription "Porini Education Microsoft Azure"
+	Connect-AzureRmAccount -Subscription "<>"
 	Get-AzContext -ListAvailable
 		check connection : Get-AzureRmContext
 
@@ -108,7 +108,7 @@ Connect-AzAccount
 #set context
     Connect-AzAccount -Subscription "Porini Education Microsoft Azure"
 
-    $str_account_name = "staccillimityy"
+    $str_account_name = "<>"
     $str_account_key = "<sorage account key>"
         
     $ctx = New-AzStorageContext -StorageAccountName $str_account_name -StorageAccountKey $str_account_key
