@@ -7,15 +7,15 @@ param(
 Import-Module SqlServer
 try
 {
-    $resourceGroupName = 'AlpitourDwhPaasProd'
+    $resourceGroupName = '<>'
     $ServiceLevelUp = 'S2'
     $ServiceLevelDown = 'S0'
-    $asServerName = 'alpitouraas'
-    $serverName = 'alpitour-dwh'
-    $poolName = 'Alpitour-DWH-Pool'
+    $asServerName = '<>'
+    $serverName = '<>'
+    $poolName = '<>'
     # Open the SQL connection
     # Get the service principal credentials connected to the automation account. 
-    $null = $SPCredential = Get-AutomationPSCredential -Name "Cred_AlpitourAS"
+    $null = $SPCredential = Get-AutomationPSCredential -Name "<>"
     # Connect to a connection to get TenantId and SubscriptionId
     $Connection = Get-AutomationConnection -Name "AzureRunAsConnection"
     $TenantId = $Connection.TenantId
@@ -61,9 +61,9 @@ catch
     $SPCredentialEmail = Get-AutomationPSCredential -Name "Email_Cred"
     $errorMessage = $_
     $Message = New-Object System.Net.Mail.MailMessage
-    $Message.From = "svinstall@alpitourworld.it"
-    $Message.To.Add("davide.sortino@porini.it")
-    $Message.To.Add("marco.mancini@porini.it")
+    $Message.From = "@sticazzi.com"
+    $Message.To.Add("@sticazzi.com")
+    $Message.To.Add("@sticazzi.com")
     $Message.SubjectEncoding = ([System.Text.Encoding]::UTF8)
     $Message.Subject = "[ALPITOUR] Failed job ProcessAzureAS DataModel"
     # Set email body
