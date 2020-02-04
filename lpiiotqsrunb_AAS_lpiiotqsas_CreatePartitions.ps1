@@ -14,19 +14,19 @@ Param(
   [Parameter(Mandatory=$true)][Int] $interval           #Interval (1, 2, ...)
 )
 # Get variable values
-$asServerName = Get-AutomationVariable -Name 'ASServerName'
-$asServerURI = Get-AutomationVariable -Name 'ASServerURI'
-$asDatabaseName = Get-AutomationVariable -Name 'ASDatabaseName'
-$asDataSource = Get-AutomationVariable -Name 'ASDataSource'
-$SQLServerMURI = Get-AutomationVariable -Name 'SQLServerMURI'
+$asServerName = Get-AutomationVariable -Name '<>'
+$asServerURI = Get-AutomationVariable -Name '<>'
+$asDatabaseName = Get-AutomationVariable -Name '<>'
+$asDataSource = Get-AutomationVariable -Name '<>'
+$SQLServerMURI = Get-AutomationVariable -Name '<>'
 
-$sqlServerName = Get-AutomationVariable -Name 'SQLServerName'
+$sqlServerName = Get-AutomationVariable -Name '<>'
 
-$resourceGroupName= Get-AutomationVariable -Name 'ResourceGroupName'
-$automationAccountName = Get-AutomationVariable -Name 'AutomationAccountName'
+$resourceGroupName= Get-AutomationVariable -Name '<>'
+$automationAccountName = Get-AutomationVariable -Name '<>'
 
 # Get the service principal credentials connected to the automation account. 
-$psCredential = Get-AutomationPSCredential -Name "lpiiotqscred_ext_brusast1" #Probabilmente serve utente admin, in caso creare credenziali admin:  lpiiotqscred_admin
+$psCredential = Get-AutomationPSCredential -Name "<>" #Probabilmente serve utente admin, in caso creare credenziali admin:  lpiiotqscred_admin
 
 # Connect to a connection to get TenantId and SubscriptionId
 $connection = Get-AutomationConnection -Name "AzureRunAsConnection"
@@ -198,7 +198,7 @@ try
 
 Write-Output "Process... start"
  ##Processing the partition
- $result = Invoke-ProcessPartition -Server $asServerURI -Database $asDatabaseName -TableName $table -PartitionName $partitionName –RefreshType Full -Credential $psCredential
+ $result = Invoke-ProcessPartition -Server $asServerURI -Database $asDatabaseName -TableName $table -PartitionName $partitionName â€“RefreshType Full -Credential $psCredential
 Write-Output "Process... end"
  ##Process Previous Partition (if necessary)
  $daysFromStart = Get-PartitionMetadata -Date $date -Frequency $frequency -Interval $interval -OutputType "DaysFromStart"
@@ -209,7 +209,7 @@ Write-Output "Process... end"
    try {
        Write-Output "Start Processing Previous Partition"
        Write-Output "Previous Partition Name: $($partitionName)"
-       $result = Invoke-ProcessPartition -Server $asServerURI -Database $asDatabaseName -TableName $table -PartitionName $partitionName –RefreshType Full -Credential $psCredential 
+       $result = Invoke-ProcessPartition -Server $asServerURI -Database $asDatabaseName -TableName $table -PartitionName $partitionName â€“RefreshType Full -Credential $psCredential 
    }
    catch {
      $errorMessage = "Previous Partition [" + $partitionName + "] does not exist."
@@ -226,36 +226,36 @@ catch
     $emailCCList = Get-AutomationVariable -Name 'EmailCCList'
     $emailCCList2 = Get-AutomationVariable -Name 'EmailCCList2'
     $emailCCList3 = Get-AutomationVariable -Name 'EmailCCList3'
-   
+Â Â  
     $psCredentialEmail = Get-AutomationPSCredential -Name "lpiiotqscred_alerts.textile" #CREDENZIALI DELL'UTENTE AUTORIZZATO AD INVIARE EMAIL
     # Set $errorMessage
     $errorMessage = $_
     Write-Output "Error: " + $errorMessage    
     # Create new MailMessage
     $message = New-Object System.Net.Mail.MailMessage
-     
+    Â 
     # Set address-properties
     $message.From = $emailFrom
     $message.replyTo = $emailFrom
     $message.To.Add($emailToList)
     $message.CC.Add($emailCCList)
-    $message.CC.Add($emailCCList2)   
+    $message.CC.Add($emailCCList2) Â Â 
     $message.CC.Add($emailCCList3)
-              
+         Â Â Â Â Â 
     # Set email subject
     $message.SubjectEncoding = ([System.Text.Encoding]::UTF8)
     $message.Subject = "[LPIOT] Failed job: lpiiotqsrunb_AAS_lpiiotqsas_CreatePartition - Partition: $partitionName"
-     
+    Â 
     # Set email body
     $message.Body = "Error message:<br><br>$errorMessage"
     $message.BodyEncoding = ([System.Text.Encoding]::UTF8)
     $message.IsBodyHtml = $true
-     
+    Â 
     # Create and set SMTP
     $smtpClient = New-Object System.Net.Mail.SmtpClient('smtp.office365.com', 587)
     $smtpClient.Credentials = $psCredentialEmail
-    $smtpClient.EnableSsl   = $true
-           
+    $smtpClient.EnableSslÂ Â  = $true
+    Â       
     # Send email message
     $smtpClient.Send($message)
     # Output status to console
