@@ -1,5 +1,5 @@
 ﻿Install-Module Az -Scope CurrentUser -AllowClobber #clobber = picchiare
-Connect-AzAccount -Subscription "<>"
+Connect-AzAccount -Subscription "<>"  #subscription facoltativo
 
 
 #if you forget location names
