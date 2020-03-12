@@ -1,6 +1,9 @@
 ﻿#ping go0gle
 ping 8.8.8.8
 
+#help
+Get-Help Add-AzADGroupMember
+
 #set variable : 
 $a = 5
 
