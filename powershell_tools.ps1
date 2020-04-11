@@ -1,4 +1,14 @@
-﻿#ping go0gle
+#folder where cmd are lounched
+path
+
+#navigate folder
+dir #not ls like linux
+
+#download a file 
+cd C: .. .. /desktop
+wget http://lamastex.org/datasets/public/NYCUSA/social-media-usage.csv # (before dowload wget, put .exe in 'path' folder (sys32))
+
+#ping go0gle
 ping 8.8.8.8
 
 #help
